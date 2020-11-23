@@ -1,7 +1,9 @@
 import sys
 from lib.utils import *
 import requests, json, base64
-#utils.checkRequirements(["numpy"])
+
+utils.checkRequirements(["shadow_useragent"])
+import shadow_useragent
 
 class tts():
   def __init__(self,args):
@@ -20,7 +22,6 @@ class tts():
       self.help()
       exit(1)
 
-
   def help(self):
   	print("")
   	print("Usage: python main.py -txt text [-h]")
@@ -31,11 +32,13 @@ class tts():
   	print("")
 
   def getAudio(self):
+    ua = shadow_useragent.ShadowUserAgent()
+    userAgent = ua.percent(0.05)
+
     url = 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=AIzaSyCpE0t4v_h4NTJbTSEIaAuLuV0FmzahJD0'
     headers = {'Host': 'texttospeech.googleapis.com',
-               'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0',
-               'Referer': 'https://www.voicebooking.com/ttsfr-v5/',
-               'Content-Length': '155'}
+               'User-Agent': userAgent,
+               'Referer': 'https://www.voicebooking.com/ttsfr-v5/'}
 
 
     data = '{\"input\":{\"text\":\"' + self.text + '\"},\"voice\":{\"name\":\"fr-FR-Wavenet-C\",\"languageCode\":\"fr-FR\"},\"audioConfig\":{\"audioEncoding\":\"LINEAR16\",\"speakingRate\":1,\"pitch\":0}}'
