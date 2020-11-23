@@ -33,14 +33,14 @@ class tts():
     self.fileName = "output.wav"
 
   def help(self):
-  	print("")
-  	print("Usage: python main.py -txt text [-play] [-h]")
-  	print("")
-  	print("Options:")
+    print("")
+    print("Usage: python main.py -txt text [-play] [-h]")
+    print("")
+    print("Options:")
     print("   -txt text  Text to convert to speech.")
     print("   -play      (Optional) Play the audio after generation.")
-  	print("   -h         (Optional) Print this help.")
-  	print("")
+    print("   -h         (Optional) Print this help.")
+    print("")
 
   def run(self):
     print("Generating... ", end="")
