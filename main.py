@@ -22,6 +22,13 @@ class tts():
       self.help()
       exit(1)
 
+    self.voice = "fr-FR-Wavenet-C"
+    self.languageCode = "fr-FR"
+    self.rate = 1 #between 0 and 2
+    self.pitch = 0 #between -20 and 20
+
+    self.fileName = "output.wav"
+
   def help(self):
   	print("")
   	print("Usage: python main.py -txt text [-h]")
@@ -31,7 +38,9 @@ class tts():
   	print("   -h         (Optional) Print this help.")
   	print("")
 
-  def getAudio(self):
+  def run(self):
+    print("Generating... ", end="")
+
     ua = shadow_useragent.ShadowUserAgent()
     userAgent = ua.percent(0.05)
 
@@ -41,8 +50,8 @@ class tts():
                'Referer': 'https://www.voicebooking.com/ttsfr-v5/'}
 
 
-    data = '{\"input\":{\"text\":\"' + self.text + '\"},\"voice\":{\"name\":\"fr-FR-Wavenet-C\",\"languageCode\":\"fr-FR\"},\"audioConfig\":{\"audioEncoding\":\"LINEAR16\",\"speakingRate\":1,\"pitch\":0}}'
-    print("Generating... ", end="")
+    data = '{\"input\":{\"text\":\"' + self.text + '\"},\"voice\":{\"name\":\"' + self.voice + '\",\"languageCode\":\"' + self.languageCode + '\"},\"audioConfig\":{\"audioEncoding\":\"LINEAR16\",\"speakingRate\":' + str(self.rate) + ',\"pitch\":' + str(self.pitch) + '}}'
+    data=data.encode('utf-8') 
     res = requests.post(url=url, data=data, headers=headers)
     
     if res.status_code == 200: #ok
@@ -51,16 +60,11 @@ class tts():
       binaryAudio=content["audioContent"]
 
       decode_string = base64.b64decode(binaryAudio)
-      wav_file = open("temp.wav", "wb")
+      wav_file = open(self.fileName, "wb")
       wav_file.write(decode_string)
       print("Done!")
     else:
       print("Failed!")
-
-  def run(self):
-    print("Running !")
-    self.getAudio()
-
 
 if __name__ == '__main__':
 	prog = tts(sys.argv)
