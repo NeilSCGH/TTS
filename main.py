@@ -2,7 +2,7 @@ import sys
 from lib.utils import *
 import requests, json, base64
 
-utils.checkRequirements(["shadow_useragent", "playsound"])
+utils.checkRequirements(["shadow-useragent", "playsound"])
 import shadow_useragent
 from playsound import playsound
 
