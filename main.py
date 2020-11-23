@@ -2,8 +2,9 @@ import sys
 from lib.utils import *
 import requests, json, base64
 
-utils.checkRequirements(["shadow_useragent"])
+utils.checkRequirements(["shadow_useragent", "playsound"])
 import shadow_useragent
+from playsound import playsound
 
 class tts():
   def __init__(self,args):
@@ -22,6 +23,8 @@ class tts():
       self.help()
       exit(1)
 
+    self.play = self.utils.argExist("-play")
+
     self.voice = "fr-FR-Wavenet-C"
     self.languageCode = "fr-FR"
     self.rate = 1 #between 0 and 2
@@ -31,10 +34,11 @@ class tts():
 
   def help(self):
   	print("")
-  	print("Usage: python main.py -txt text [-h]")
+  	print("Usage: python main.py -txt text [-play] [-h]")
   	print("")
   	print("Options:")
-  	print("   -txt text  Text to convert to speech.")
+    print("   -txt text  Text to convert to speech.")
+    print("   -play      (Optional) Play the audio after generation.")
   	print("   -h         (Optional) Print this help.")
   	print("")
 
@@ -58,11 +62,17 @@ class tts():
       content = res.content
       content = json.loads(content.decode('utf-8'))
       binaryAudio=content["audioContent"]
-
       decode_string = base64.b64decode(binaryAudio)
+
       wav_file = open(self.fileName, "wb")
       wav_file.write(decode_string)
+      wav_file.close()
       print("Done!")
+
+      if self.play: 
+        print("Playing...", end="")
+        playsound(self.fileName)
+        print("Done!")
     else:
       print("Failed!")
 
